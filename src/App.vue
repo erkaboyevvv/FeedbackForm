@@ -1,78 +1,107 @@
 <template>
   <div class="form_card">
-    <h1>Feedback Form</h1>
-    <p>
-      We would love to hear your thoughts, suggestions, concerns or problems
-      with anything so we can improve!
-    </p>
+    <div class="container">
+      <h1>Feedback Form</h1>
+      <p>
+        We would love to hear your thoughts, suggestions, concerns or problems
+        with anything so we can improve!
+      </p>
+    </div>
     <hr />
-    <form @submit.prevent="">
-      <label for=""> Feedback Type </label>
+    <form @submit.prevent.enter="checkPass()" autocomplete="off">
+      <div class="container">
+        <label for="" class="feedback_form_label"> Feedback Type </label>
 
-      <div class="radio_group">
-        <input
-          id="comments_radio"
-          value="Comments"
-          v-model="picked"
-          type="radio"
-        />
+        <div class="radio_group">
+          <div class="radio">
+            <input
+              id="comments_radio"
+              value="Comments"
+              v-model="picked"
+              type="radio"
+            />
 
-        <label for="comments_radio">Comments</label>
+            <label for="comments_radio">Comments</label>
+          </div>
 
-        <input
-          id="suggestions_radio"
-          value="Suggestions"
-          v-model="picked"
-          type="radio"
-        />
+          <div class="radio">
+            <input
+              id="suggestions_radio"
+              value="Suggestions"
+              v-model="picked"
+              type="radio"
+            />
 
-        <label for="suggestions_radio">Suggestions</label>
+            <label for="suggestions_radio">Suggestions</label>
+          </div>
 
-        <input
-          id="questions_radio"
-          value="Questions"
-          v-model="picked"
-          type="radio"
-        />
+          <div class="radio">
+            <input
+              id="questions_radio"
+              value="Questions"
+              v-model="picked"
+              type="radio"
+            />
 
-        <label for="questions_radio">Questions</label>
-      </div>
+            <label for="questions_radio">Questions</label>
+          </div>
+        </div>
 
-      <label for="desc_area">
-        Describe Your Feedback:<span style="color: red">*</span></label
-      >
-      <textarea name="" id="desc_area" cols="70" rows="10" required></textarea>
-
-      <div class="row">
-        <label for="f_name" title="Please enter your first name"
-          >First Name<span style="color: red">*</span></label
+        <label for="desc_area" class="description_label">
+          Describe Your Feedback: <span style="color: red">*</span></label
         >
-        <input
-          id="f_name"
-          type="text"
-          v-model.trim="firstName"
+        <textarea
+          spellcheck="false"
+          name=""
+          id="desc_area"
+          cols="70"
+          rows="10"
           required
-          placeholder="First Name"
-        />
+        ></textarea>
 
-        <input
-          id="l_name"
-          type="text"
-          v-model.trim="lastName"
-          placeholder="Last Name"
-        />
+        <div class="row">
+          <div class="column">
+            <label for="f_name" title="Please enter your first name"
+              >FirstName<span style="color: red">*</span></label
+            >
+            <input id="f_name" type="text" v-model.trim="firstName" required />
+            <p>First Name</p>
+          </div>
+          <div class="column">
+            <label for="l_name">Last Name</label>
+            <input id="l_name" type="text" v-model.trim="lastName" />
+            <p>Last Name</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="column">
+            <label for="email">E-mail<span style="color: red">*</span></label>
+            <input id="email" type="email" v-model.trim="email" required />
+            <p>example@example.com</p>
+          </div>
+
+          <div class="column">
+            <label for="password"
+              >Password<span style="color: red">*</span></label
+            >
+            <input
+              autocomplete="off"
+              id="password"
+              type="password"
+              v-model.trim="password"
+              required
+            />
+            <p :style="{ color: pass_subtitle_color }">At least 6 characters</p>
+          </div>
+        </div>
       </div>
 
-      <label for="email">Email<span style="color: red">*</span></label>
-      <input
-        id="email"
-        type="email"
-        v-model.trim="email"
-        required
-        placeholder="Email"
-      />
+      <hr />
 
-      <button>Submit</button>
+      <div class="center_tag">
+        <button @click.enter="checkPass()">Submit</button>
+      </div>
     </form>
   </div>
 </template>
@@ -81,11 +110,18 @@
 export default {
   data() {
     return {
-      picked: null,
+      picked: "Comments",
+      password: null,
+      email: null,
+      pass_subtitle_color: "#57647e",
     };
   },
   computed: {},
-  methods: {},
+  methods: {
+    checkPass() {
+      this.pass_subtitle_color = this.password.length < 6 ? "red" : "#57647e";
+    },
+  },
 };
 </script>
 
@@ -98,44 +134,97 @@ export default {
 
 body {
   background-color: rgba(128, 128, 128, 0.329);
+  width: 100vw;
+}
+
+.container {
+  padding: 0 50px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+}
+
+.center_tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  width: 100%;
+  padding: 5px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+  resize: vertical;
+  outline: none;
+  border-color: #16aa52;
+}
+
+.radio {
+  display: flex;
+  align-items: first baseline;
+  justify-content: center;
+  gap: 3px;
 }
 
 #app {
   font-family: Arial, sans-serif;
-  margin: 0 350px;
-  padding: 30px 30px;
-  background-color: white;
-
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   .form_card {
-    max-width: 100vw;
-    border-radius: 10px;
+    width: 700px;
+    margin: 50px auto;
+    border-radius: 3px;
+    padding: 50px 0;
     background-color: #f8f9fa;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    position: relative;
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
 
     h1 {
       font-size: 2em;
-      color: #000;
-      margin-bottom: 10px;
+      color: #2c3345;
+      margin-bottom: 5px;
+      word-break: break-word;
+      font-weight: 600;
+      line-height: 1.25;
     }
 
     p {
       font-size: 1em;
-      color: #666666a6;
-      margin-bottom: 20px;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #57647e;
+      margin-bottom: 40px;
       font-weight: 500;
+      line-height: 1.6;
+      word-break: break-word;
     }
 
     hr {
-      margin: 20px 0;
+      margin-bottom: 30px;
+      border: 0;
+      height: 0;
+      border-top: 1.5px solid #d7d8e1;
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.3);
     }
 
     .radio_group {
       display: flex;
       align-items: baseline;
       justify-content: flex-start;
-
-      gap: 5px;
+      gap: 120px;
+      margin-bottom: 40px;
     }
 
     form {
@@ -145,61 +234,44 @@ body {
       justify-content: space-between;
       align-items: flex-start;
 
-      label {
-        display: block;
-        margin-bottom: 5px;
-      }
-
-      input[type="text"],
-      input[type="email"],
-      textarea {
+      hr {
+        margin-bottom: 40px;
+        border: 0;
+        height: 0;
+        border-top: 1.5px solid #d7d8e1;
+        border-bottom: 1.5px solid rgba(255, 255, 255, 0.3);
         width: 100%;
-        padding: 5px;
-        font-size: 16px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        margin-bottom: 10px;
-        resize: none;
-        border-color: #16aa52;
-        outline-color: red;
       }
 
-      input[type="radio"] {
-        margin-right: 10px;
+      .feedback_form_label {
+        display: block;
+        margin-bottom: 15px;
       }
 
-      button {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
+      .description_label {
+        display: block;
+        margin-bottom: 15px;
       }
 
-      button:disabled {
-        background-color: #ccc;
+      textarea {
+        margin-bottom: 40px;
+        text-decoration: none;
       }
 
       .row {
+        width: 100%;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        gap: 10px;
+        justify-content: flex-start;
+        gap: 30px;
         margin-bottom: 20px;
-
-        input[type="text"] {
+        .column {
           width: 100%;
+          p {
+            font-size: 0.8em;
+            color: #57647e;
+          }
         }
-
-        input[type="email"] {
-          width: 100%;
-        }
-      }
-
-      hr {
-        background-color: #666666a6;
-        position: absolute;
       }
 
       button {
